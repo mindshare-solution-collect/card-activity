@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Button } from '../button/Button';
 import { ButtonWithIcon } from '../button/ButtonWithIcon';
@@ -12,8 +12,20 @@ import { ASSET_ETH, ASSET_LAKE } from '../../constants/assets';
 import { formatValue } from '../../utils/formatValue';
 
 export const Navigation = () => {
-    const { account, ethBalance, tokenBalance, activateBrowserWallet } =
-        useContext(WalletConnectContext);
+    const {
+        active,
+        account,
+        ethBalance,
+        tokenBalance,
+        error,
+        activateBrowserWallet,
+    } = useContext(WalletConnectContext);
+
+    useEffect(() => {
+        if (active && !error) {
+            activateBrowserWallet();
+        }
+    }, []);
 
     const activate = async () => {
         await activateBrowserWallet();
@@ -31,7 +43,7 @@ export const Navigation = () => {
                 </div>
 
                 <div className="flex items-center justify-end">
-                    {!!account ? (
+                    {account ? (
                         <>
                             <Button
                                 disabled={true}

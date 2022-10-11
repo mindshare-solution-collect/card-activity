@@ -1,7 +1,14 @@
-import { useEthers, useEtherBalance, useTokenBalance } from '@usedapp/core';
+import {
+    Mainnet,
+    Goerli,
+    useEthers,
+    useEtherBalance,
+    useTokenBalance,
+} from '@usedapp/core';
 import { JsonRpcProvider } from '@ethersproject/providers';
 import Web3Modal from 'web3modal';
-import { useState } from 'react';
+import WalletConnectProvider from '@walletconnect/web3-provider';
+import { useEffect, useState } from 'react';
 import { ASSET_LAKE } from '../constants/assets';
 import { parseBigNumber } from '../utils/parseBigNumber';
 
@@ -43,6 +50,12 @@ export const useWalletConnect = () => {
         activateBrowserWallet,
     } = useEthers();
 
+    useEffect(() => {
+        if (!active && !error) {
+            activateProvider();
+        }
+    }, []);
+
     const ethBalanceAsBigNumber = useEtherBalance(account);
     const tokenBalanceAsBigNumber = useTokenBalance(
         ASSET_LAKE.address,
@@ -57,6 +70,17 @@ export const useWalletConnect = () => {
                     description: 'Connect with the provider in your Browser',
                 },
                 package: null,
+            },
+            walletconnect: {
+                package: WalletConnectProvider,
+                options: {
+                    [Mainnet.chainId]: `https://eth-mainnet.g.alchemy.com/v2/${
+                        import.meta.env.VITE_ALCHEMY_ETHEREUM_KEY
+                    }`,
+                    [Goerli.chainId]: `https://eth-goerli.g.alchemy.com/v2/${
+                        import.meta.env.VITE_ALCHEMY_GOERLI_KEY
+                    }`,
+                },
             },
         };
         const web3Modal = new Web3Modal({
