@@ -34,7 +34,7 @@ export const Withdraw = ({ data, isLoading, refresh }: Props) => {
         let withdrawn = 0;
         data.map((el) => {
             locked = locked + el.allocatedAmount - el.unlockedAmount;
-            unlocked = unlocked + el.unlockedAmount;
+            unlocked = unlocked + el.unlockedAmount - el.withdrawnAmount;
             withdrawn = withdrawn + el.withdrawnAmount;
         });
         setTotalLocked(locked);
@@ -145,7 +145,7 @@ export const Withdraw = ({ data, isLoading, refresh }: Props) => {
                                 />
                             ) : (
                                 <>
-                                    {totalUnlocked - totalWithdrawn === 0 ? (
+                                    {totalUnlocked === 0 ? (
                                         <Button
                                             size="small"
                                             disabled={true}
@@ -156,7 +156,7 @@ export const Withdraw = ({ data, isLoading, refresh }: Props) => {
                                             size="small"
                                             disabled={false}
                                             text={`WITHDRAW ${formatValue(
-                                                totalUnlocked - totalWithdrawn,
+                                                totalUnlocked,
                                                 '',
                                                 0,
                                             )} LAKE`}
