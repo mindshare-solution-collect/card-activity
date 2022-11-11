@@ -1,3 +1,4 @@
+import { AccountOverview } from '../components/accountOverview/AccountOverview';
 import { Footer } from '../components/footer/Footer';
 import { Page } from '../components/page/Page';
 import { Stats } from '../components/stats/Stats';
@@ -7,8 +8,10 @@ import { Widgets } from '../components/widgets/Widgets';
 export const Main = () => (
     <Page>
         <div className="w-full flex flex-col items-center justify-center px-28">
-            <div className="w-full h-[90vh] flex justify-between pt-14 pb-6">
-                <div className="w-[62%]">Your Account </div>
+            <div className="w-full h-[85vh] flex justify-between pt-14 pb-6">
+                <div className="w-[66%]">
+                    <AccountOverview />
+                </div>
                 <div className="w-[31%]">
                     <Stats />
                 </div>
