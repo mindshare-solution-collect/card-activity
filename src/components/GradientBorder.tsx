@@ -7,3 +7,7 @@ export const GradientBorder = styled.div`
     filter: drop-shadow(0px 0px 6px ${colors.purple['600']})
         drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
 `;
+
+export const GradientBorderWithNoShadow = styled.div`
+    background: linear-gradient(${colors.purple['300']}, ${colors.blue['300']});
+`;

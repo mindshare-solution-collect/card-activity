@@ -1,5 +1,3 @@
-import '../../../../assets/rc-slider.css';
-
 import { useContext, useEffect, useState } from 'react';
 
 import { Button } from '../../../button/Button';

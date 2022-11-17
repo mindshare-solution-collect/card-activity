@@ -1,5 +1,11 @@
 import { ASSET_LAKE, ASSET_USDT } from '../../../../constants/assets';
 import { BigNumber, Contract } from 'ethers';
+import {
+    DEFAULT_SLIPPAGE_TOLERANCE,
+    DEFAULT_TRANSACTION_DEADLINE,
+    MAX_TICK,
+    REFRESH_LAKE_PRICE_INTERVAL,
+} from '../../../../constants/commons';
 import { useContext, useEffect, useState } from 'react';
 
 import { Button } from '../../../button/Button';
@@ -11,14 +17,15 @@ import { GradientButtonWithSpinner } from '../../../button/gradient/GradientButt
 import { IPositionDetails } from '../../../../interfaces/positionDetails.interface';
 import { JsonRpcProvider } from '@ethersproject/providers';
 import { PositionsList } from '../PositionsList';
-import { REFRESH_LAKE_PRICE_INTERVAL } from '../../../../constants/commons';
 import ReactModal from 'react-modal';
+import { Settings } from './Settings';
 import { TokenInput } from '../TokenInput';
 import { WalletConnectContext } from '../../../../context';
 import cancelIcon from './../../../../assets/icons/cancel-icon.svg';
 import { colors } from '../../../../constants/colors';
 import { customModalStyle } from '../../../../constants/modal';
 import { parseBigNumber } from '../../../../utils/parseBigNumber';
+import settingsIcon from './../../../../assets/icons/settings-icon.svg';
 import { useConfig } from '../../../../hooks/use-config';
 import { useTokenAllowance } from '@usedapp/core';
 import { useUniswap } from '../../../../hooks/use-uniswap';
@@ -51,6 +58,14 @@ export const ProvideLiquidityModal = ({
     const [selectedPosition, setSelectedPosition] = useState<
         IPositionDetails | undefined
     >(undefined);
+    const [slippageTolerance, setSlippageTolerance] = useState(
+        DEFAULT_SLIPPAGE_TOLERANCE,
+    );
+    const [transactionDeadline, setTransactionDeadline] = useState(
+        DEFAULT_TRANSACTION_DEADLINE,
+    );
+    const [tickLower, setTickLower] = useState(-MAX_TICK);
+    const [tickUpper, setTickUpper] = useState(MAX_TICK);
     const [usdtInputValue, setUsdtInputValue] = useState(0);
     const [lakeInputValue, setLakeInputValue] = useState(0);
     const [isUsdtValueValid, setIsUsdtValueValid] = useState(true);
@@ -60,6 +75,7 @@ export const ProvideLiquidityModal = ({
     const [isUsdtApproving, setIsUsdtApproving] = useState(false);
     const [isLakeApproving, setIsLakeApproving] = useState(false);
     const [isLiquidityProviding, setIsLiquidityProviding] = useState(false);
+    const [areSettingsOpen, setAreSettingsOpen] = useState(false);
     const usdtAllowance = useTokenAllowance(
         usdtAddress,
         account,
@@ -159,6 +175,10 @@ export const ProvideLiquidityModal = ({
             await provideLiquidity(
                 usdtInputValue,
                 lakeInputValue,
+                slippageTolerance,
+                transactionDeadline,
+                tickLower,
+                tickUpper,
                 account,
                 selectedPosition,
             );
@@ -172,6 +192,7 @@ export const ProvideLiquidityModal = ({
     const onCloseClick = () => {
         setSelectedPosition(undefined);
         setStep(1);
+        setAreSettingsOpen(false);
         closeModal();
     };
 
@@ -209,11 +230,63 @@ export const ProvideLiquidityModal = ({
                         </div>
                     ) : (
                         <>
-                            <div className="font-kanit-medium color-gray-gradient text-shadow text-xl tracking-[.12em] text-center mb-4">
-                                {step === 1
-                                    ? 'CHOOSE POSITION'
-                                    : 'PROVIDE LIQUIDITY'}
-                            </div>
+                            {step === 1 ? (
+                                <div className="font-kanit-medium color-gray-gradient text-shadow text-xl tracking-[.12em] text-center mb-4">
+                                    CHOOSE POSITION
+                                </div>
+                            ) : (
+                                <div className="w-full flex items-center mb-4 justify-around">
+                                    <div className="font-kanit-medium color-gray-gradient text-shadow text-xl tracking-[.12em] text-center">
+                                        PROVIDE LIQUIDITY
+                                    </div>
+                                    <img
+                                        className="w-[1.5rem] h-[1.5rem] cursor-pointer"
+                                        src={settingsIcon}
+                                        alt="settings"
+                                        onClick={() => {
+                                            setAreSettingsOpen(
+                                                !areSettingsOpen,
+                                            );
+                                        }}
+                                    ></img>
+                                </div>
+                            )}
+                            {areSettingsOpen && (
+                                <Settings
+                                    tickLower={tickLower}
+                                    tickUpper={tickUpper}
+                                    slippageTolerance={slippageTolerance}
+                                    transactionDeadline={transactionDeadline}
+                                    onLowerPriceChange={(event: any) => {
+                                        setTickLower(
+                                            event.target.value || -MAX_TICK,
+                                        );
+                                    }}
+                                    onUpperPriceChange={(event: any) => {
+                                        setTickUpper(
+                                            event.target.value || MAX_TICK,
+                                        );
+                                    }}
+                                    onSlippageToleranceChange={(event: any) => {
+                                        setSlippageTolerance(
+                                            event.target.value ||
+                                                DEFAULT_SLIPPAGE_TOLERANCE,
+                                        );
+                                    }}
+                                    onTransactionDeadlineChange={(
+                                        event: any,
+                                    ) => {
+                                        setTransactionDeadline(
+                                            event.target.value ||
+                                                DEFAULT_TRANSACTION_DEADLINE,
+                                        );
+                                    }}
+                                    onFullRangeClick={() => {
+                                        setTickLower(-MAX_TICK);
+                                        setTickUpper(MAX_TICK);
+                                    }}
+                                />
+                            )}
                             <div className="flex min-w-[20vw]">
                                 {step === 1 ? (
                                     <PositionsList

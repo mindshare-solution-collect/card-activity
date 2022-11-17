@@ -1,8 +1,8 @@
 import { ASSET_LAKE, ASSET_USDT } from '../constants/assets';
 import { CurrencyAmount, Percent } from '@uniswap/sdk-core';
-import { MAX_TICK, PROVIDE_LIQUIDITY_DEADLINE } from '../constants/commons';
 import { NonfungiblePositionManager, Position } from '@uniswap/v3-sdk';
 
+import { DEFAULT_TRANSACTION_DEADLINE } from '../constants/commons';
 import { IPositionDetails } from '../interfaces/positionDetails.interface';
 import { JsonRpcProvider } from '@ethersproject/providers';
 import { useConfig } from './use-config';
@@ -21,6 +21,10 @@ export const useUniswap = (provider: JsonRpcProvider) => {
     const provideLiquidity = async (
         usdtAmount: number,
         lakeAmount: number,
+        slippageTolerance: number,
+        transactionDeadline: number,
+        tickLower: number,
+        tickUpper: number,
         account: string,
         selectedPosition?: IPositionDetails,
     ): Promise<void> => {
@@ -32,30 +36,34 @@ export const useUniswap = (provider: JsonRpcProvider) => {
                 amount1: Math.round(lakeAmount * 10 ** ASSET_LAKE.decimals),
                 tickLower: selectedPosition
                     ? selectedPosition.tickLower
-                    : -MAX_TICK,
+                    : tickLower,
                 tickUpper: selectedPosition
                     ? selectedPosition.tickUpper
-                    : MAX_TICK,
+                    : tickUpper,
                 useFullPrecision: true,
             });
 
             const deadline = (
-                (new Date().getTime() + PROVIDE_LIQUIDITY_DEADLINE) /
-                1000
+                new Date().getTime() / 1000 +
+                transactionDeadline * 60
             )
                 .toFixed()
                 .toString();
 
-            const slippageTolerance = new Percent(50, 10000);
-
             const { calldata, value } = selectedPosition
                 ? NonfungiblePositionManager.addCallParameters(position, {
                       tokenId: selectedPosition.positionId,
-                      slippageTolerance,
+                      slippageTolerance: new Percent(
+                          slippageTolerance * 100,
+                          10000,
+                      ),
                       deadline,
                   })
                 : NonfungiblePositionManager.addCallParameters(position, {
-                      slippageTolerance,
+                      slippageTolerance: new Percent(
+                          slippageTolerance * 100,
+                          10000,
+                      ),
                       recipient: account,
                       deadline,
                   });
@@ -93,8 +101,8 @@ export const useUniswap = (provider: JsonRpcProvider) => {
             });
 
             const deadline = (
-                (new Date().getTime() + PROVIDE_LIQUIDITY_DEADLINE) /
-                1000
+                new Date().getTime() / 1000 +
+                DEFAULT_TRANSACTION_DEADLINE * 60
             )
                 .toFixed()
                 .toString();
