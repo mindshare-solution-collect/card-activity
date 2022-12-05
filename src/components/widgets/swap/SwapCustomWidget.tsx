@@ -12,7 +12,6 @@ export const SwapCustomWidget = () => {
     const { library } = useContext(WalletConnectContext);
     const {
         chainId,
-        rpcUrl,
         lakeAddress,
         swapConvenienceFee,
         swapConvenienceFeeRecipient,
@@ -31,7 +30,6 @@ export const SwapCustomWidget = () => {
     return (
         <div>
             <SwapWidget
-                disableBranding
                 hideConnectionUI
                 width="100%"
                 provider={library}

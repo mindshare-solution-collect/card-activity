@@ -40,7 +40,7 @@ export const Main = () => {
                                 <Stats />
                             </div>
                         </div>
-                        <div className="w-full h-[650px] py-6">
+                        <div className="w-full h-[670px] py-6">
                             <Widgets />
                         </div>
                         <div className="w-full h-[630px] py-6">
