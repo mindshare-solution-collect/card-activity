@@ -1,6 +1,5 @@
-const infuraId = process.env.REACT_APP_INFURA_ID;
-
 import '@uniswap/widgets/fonts.css';
+
 import { SwapWidget, Theme } from '@uniswap/widgets';
 
 import { WalletConnectContext } from '../../../context';
@@ -28,18 +27,12 @@ export const SwapCustomWidget = () => {
         fontFamily: 'Kanit-Regular',
     };
 
-    const jsonRpcUrlMap = { 
-        1: ['https://rpc.flashbots.net'], 
-        5: [`https://goerli.infura.io/v3/${infuraId}`]
-      };
-
     return (
         <div>
             <SwapWidget
                 hideConnectionUI
                 width="100%"
                 provider={library}
-                jsonRpcUrlMap={jsonRpcUrlMap}
                 defaultOutputTokenAddress={lakeAddress}
                 convenienceFee={swapConvenienceFee}
                 convenienceFeeRecipient={{
