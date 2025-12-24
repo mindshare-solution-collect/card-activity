@@ -13,9 +13,9 @@ export const ASSET_ETH: IAsset = {
     decimals: 18,
 };
 
-export const ASSET_DAI: IAsset = {
-    name: 'DAI',
-    symbol: 'DAI',
+export const ASSET_USDC: IAsset = {
+    name: 'USD Coin',
+    symbol: 'USDC',
     decimals: 6,
 };
 
@@ -25,4 +25,4 @@ export const ASSET_WETH: IAsset = {
     decimals: 18,
 };
 
-export const ASSETS: IAsset[] = [ASSET_LAKE, ASSET_ETH, ASSET_USDT, ASSET_WETH];
+export const ASSETS: IAsset[] = [ASSET_LAKE, ASSET_ETH, ASSET_USDC, ASSET_WETH];
