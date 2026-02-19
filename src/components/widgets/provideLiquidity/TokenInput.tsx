@@ -1,4 +1,4 @@
-import { ASSET_USDT, ASSET_WETH } from '../../../constants/assets';
+import { ASSET_DAI, ASSET_WETH } from '../../../constants/assets';
 
 import ReactTooltip from 'react-tooltip';
 import ethLogo from './../../../assets/icons/eth-logo.svg';
@@ -37,7 +37,7 @@ export const TokenInput = ({
                 <img
                     className="w-[2.5rem] h-[2.5rem]"
                     src={
-                        tokenSymbol === ASSET_USDT.symbol
+                        tokenSymbol === ASSET_DAI.symbol
                             ? usdtLogo
                             : tokenSymbol === ASSET_WETH.symbol
                             ? ethLogo
