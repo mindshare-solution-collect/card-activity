@@ -1,10 +1,10 @@
-import { ASSET_USDT, ASSET_WETH } from '../../../constants/assets';
+import { ASSET_USDC, ASSET_WETH } from '../../../constants/assets';
 
 import ReactTooltip from 'react-tooltip';
 import ethLogo from './../../../assets/icons/eth-logo.svg';
 import { formatValue } from '../../../utils/formatValue';
 import lakeLogo from './../../../assets/icons/lake-logo.svg';
-import usdtLogo from './../../../assets/icons/usdt-logo.svg';
+import usdcLogo from './../../../assets/icons/usdt-logo.svg';
 
 type Props = {
     balance: number;
@@ -37,8 +37,8 @@ export const TokenInput = ({
                 <img
                     className="w-[2.5rem] h-[2.5rem]"
                     src={
-                        tokenSymbol === ASSET_USDT.symbol
-                            ? usdtLogo
+                        tokenSymbol === ASSET_USDC.symbol
+                            ? usdcLogo
                             : tokenSymbol === ASSET_WETH.symbol
                             ? ethLogo
                             : lakeLogo
