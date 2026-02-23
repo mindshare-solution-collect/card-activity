@@ -5,10 +5,7 @@ export const isPositionActive = (
     tokenB: string,
     liquidity: number,
 ) => {
-    const { lakeAddress, getPool } = useConfig();
-    return (
-        !!getPool(tokenA, tokenB) &&
-        (tokenA === lakeAddress || tokenB === lakeAddress) &&
-        liquidity > 0
-    );
+    const { getPool } = useConfig();
+    const pool = getPool(tokenA, tokenB);
+    return !!pool && pool.token0.address === tokenA && pool.token1.address === tokenB && liquidity > 0;
 };

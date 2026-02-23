@@ -25,10 +25,23 @@ export const ASSET_USDC: IAsset = {
     decimals: 6,
 };
 
+export const ASSET_USDT: IAsset = {
+    name: 'USD Tether',
+    symbol: 'USDT',
+    decimals: 6,
+};
+
 export const ASSET_WETH: IAsset = {
     name: 'Wrapped Ether',
     symbol: 'WETH',
     decimals: 18,
 };
 
-export const ASSETS: IAsset[] = [ASSET_LAKE, ASSET_ETH, ASSET_USDT, ASSET_WETH];
+export const ASSETS: IAsset[] = [
+    ASSET_LAKE,
+    ASSET_ETH,
+    ASSET_DAI,
+    ASSET_USDC,
+    ASSET_USDT,
+    ASSET_WETH,
+];
