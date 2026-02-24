@@ -13,9 +13,9 @@ export const ASSET_ETH: IAsset = {
     decimals: 18,
 };
 
-export const ASSET_DAI: IAsset = {
-    name: 'DAI',
-    symbol: 'DAI',
+export const ASSET_USDT: IAsset = {
+    name: 'Tether USDT',
+    symbol: 'USDT',
     decimals: 6,
 };
 
